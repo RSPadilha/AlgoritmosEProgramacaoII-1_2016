@@ -6,13 +6,8 @@ public class Node<T> {
 
 	public Node(T data){
 		this.data = data;
-		/*previous = null;
-		next = null;*/
 	}
-	public Node(Node<T> head, T data){
-		
-	}
-
+	
 	public void setNext(Node<T> next){
 		this.next = next;
 	}

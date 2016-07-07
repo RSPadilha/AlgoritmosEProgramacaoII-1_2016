@@ -4,36 +4,38 @@ public class List <T> {
 	private Node<T> head, tail;
 	private int count = 0;
 
+	//criar classe iterator tendo o metodo hasNext()
+	//itarator é usado para percorrer a lista
+	
 	public void append(T data){//insere no final
 		Node<T> actual = new Node<T>(data);
-		if(head == null){
-			head = actual;
-			return;//acaba funcao ou break
-		}
-		Node<T> iter = head;
-		
-	}
-
-
-
-
-
-
-	/*
-		//add on start
-		if(count == 0){
+		if(head == null){//isEmpty()
 			head = actual;
 			tail = head;
 			count++;
-		}else if(count == 1){
+			//return;//acaba funcao ou break
+		}else if(count == 1){//melhorar teste
+			head.setNext(actual);
 			tail = actual;
-			head.setNext(tail);
+			tail.setPrevious(head);
+			count++;
 		}else{
-
+			Node<T> iter = head;
+			while(iter.getNext() != null){
+				iter = iter.getNext();
+			}
+			iter.setNext(actual);
+			tail = actual;
+			tail.setPrevious(iter);
 		}
-	 */
-
-
+	}//fim append
+	
+	//teste
+	public String mostraProx(){
+		//nunca mostar o anterior do head nem o proximo do tail(NullPointerException)
+		//tambem cuidar se tiver somente um elemento na lista, nesse caso mostar somente getData()
+		return (String) tail.getPrevious().getData() + "tail\n" +head.getNext().getData()+"head";
+	}
 
 	public void insert(int index, T data){
 		Node<T> actual = new Node<>(data);
@@ -48,7 +50,7 @@ public class List <T> {
 		return null;//implementar
 	}
 
-	public void remove(int index){}
+	public void remove(int index){}//deixar variavel sem referencia e deixar GarbageColector agir, ou setar Null
 
 	public int getSize(){
 		return count;
@@ -61,12 +63,19 @@ public class List <T> {
 		}
 		if(iter.getData() == data)
 			return true;
-		return false;//or using .equals
+		return false;//or using .equals //melhorar
 	}
 
 	@Override
 	public String toString() {
-		return "List [head=" + head.getData() + "]";
+		String retorno = "";
+		Node<T> iter = head;
+		while(iter != null){
+			retorno += iter.getData() + "\n";
+			iter = iter.getNext();
+			//melhorar usando string.algumacoisa
+		}
+		return retorno;
 	}
 
 }
