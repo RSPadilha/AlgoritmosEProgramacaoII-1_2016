@@ -1,16 +1,17 @@
+//criar classe iterator tendo o metodo hasNext()
+//itarator é usado para percorrer a lista
 
 public class List <T> {
 
 	private Node<T> head, tail;
 	private int count = 0;
+	//criar iterator aqui ou dar new dentro de cada metodo
 
 	public List(){}
 	public List(T data){
 		head = new Node<T>(data);
 		tail = head;
 	}
-	//criar classe iterator tendo o metodo hasNext()
-	//itarator é usado para percorrer a lista
 
 	public void append(T data){//insere no final
 		Node<T> actual = new Node<T>(data);
@@ -30,17 +31,18 @@ public class List <T> {
 			}
 			iter.setNext(actual);
 			tail = actual;
-			tail.setPrevious(iter);//possivel inverter a ordem?
+			tail.setPrevious(iter);
+			count++;
 		}
-	}//fim append
+	}
 
-	//teste excluir
+	//teste. excluir
 	public String mostraProx(){
 		//nunca mostar o anterior do head nem o proximo do tail(NullPointerException)
 		//tambem cuidar se tiver somente um elemento na lista, nesse caso mostar somente getData()
 		return (String) tail.getPrevious().getData() + "tail\n" +head.getNext().getData()+"head";//todos nexts setados
 	}
-	//teste excluir
+	//teste. excluir
 	public String percorreInvertido(){//todos previous setados
 		String retorno = "";
 		Node<T> iter = tail;
@@ -55,26 +57,49 @@ public class List <T> {
 		Node<T> actual = new Node<>(data);
 		Node<T> iter = head;
 		for(int i = 1; i < index; i++){//percorre ate chegar na pos desejada
+			if(index > count){
+				append(data);
+				return;
+			}
 			iter = iter.getNext();
 		}
 		if(iter == head){
-			//
+			head.setPrevious(actual);
+			actual.setNext(head);
+			head = actual;
 			count++;
+		}else if(iter == tail){
+			append(data);
+			/*tail.getPrevious().setNext(actual);
+			actual.setPrevious(tail.getPrevious());
+			actual.setNext(tail);
+			tail.setPrevious(actual);
+			count++;*/
 		}else{
+			//ou usar construtor (anterior, dado, prox)
 			actual.setPrevious(iter.getPrevious());
 			actual.setNext(iter);
-			iter.getPrevious().setNext(actual);
-			iter.getNext().setPrevious(actual);
+			actual.getPrevious().setNext(actual);
+			actual.getNext().setPrevious(actual);
 			count++;
 		}
 	}
 
-	public T getNode(int index){
-		return null;//implementar
-	}
-
 	public void remove(int index){//deixar variavel sem referencia e deixar GarbageColector agir, ou setar Null
-		
+		Node<T> iter = head;
+		for(int i = 1; i < index && i < count; i++){
+			iter = iter.getNext();
+		}
+		if(iter == head){
+			head = head.getNext();
+			head.setPrevious(null);
+		}else if(iter == tail){
+			tail.getPrevious().setNext(null);
+			tail = tail.getPrevious();
+		}else{
+			iter.getPrevious().setNext(iter.getNext());
+			iter.getNext().setPrevious(iter.getPrevious());
+		}
 	}
 
 	public int getSize(){
@@ -83,12 +108,23 @@ public class List <T> {
 
 	public boolean has(T data){
 		Node<T> iter = head;
-		while(iter.getData()!= data){
+		while(iter.getData()!= data && iter.getNext() != null){
 			iter = iter.getNext();
 		}
-		if(iter.getData() == data)
+		if(iter.getData() == data){//if eh necessario?
 			return true;
-		return false;//or using .equals //melhorar
+		}
+		else{
+			return false;//or using .equals //melhorar
+		}
+	}
+
+	public void print(){
+		Node<T> iter = head;
+		while(iter != null){
+			System.out.println(iter.getData());
+			iter = iter.getNext();
+		}
 	}
 
 	@Override
