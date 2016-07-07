@@ -11,11 +11,14 @@ public class RunList {
 		listString.append("This is a test5");
 		listString.append("This is a test6");
 		listString.append("This is a test7");
-		System.out.println(listString.mostraProx());
-		listInt.append(20);
-		
+		System.out.println(listString.mostraProx());//testa segunda e penultima pos
+		System.out.println(listString.percorreInvertido());
 		System.out.println(listString);
-		System.out.println(listInt);
+		listInt.append(333);
+		System.out.println(listInt+"INT");
+		
+		listString.insert(1, "inserido na 2");
+		System.out.println(listString);
 	}
 
 }

@@ -4,17 +4,21 @@ public class List <T> {
 	private Node<T> head, tail;
 	private int count = 0;
 
+	public List(){}
+	public List(T data){
+		head = new Node<T>(data);
+		tail = head;
+	}
 	//criar classe iterator tendo o metodo hasNext()
 	//itarator é usado para percorrer a lista
-	
+
 	public void append(T data){//insere no final
 		Node<T> actual = new Node<T>(data);
 		if(head == null){//isEmpty()
 			head = actual;
 			tail = head;
 			count++;
-			//return;//acaba funcao ou break
-		}else if(count == 1){//melhorar teste
+		}else if(head == tail){//um elemento
 			head.setNext(actual);
 			tail = actual;
 			tail.setPrevious(head);
@@ -26,31 +30,52 @@ public class List <T> {
 			}
 			iter.setNext(actual);
 			tail = actual;
-			tail.setPrevious(iter);
+			tail.setPrevious(iter);//possivel inverter a ordem?
 		}
 	}//fim append
-	
-	//teste
+
+	//teste excluir
 	public String mostraProx(){
 		//nunca mostar o anterior do head nem o proximo do tail(NullPointerException)
 		//tambem cuidar se tiver somente um elemento na lista, nesse caso mostar somente getData()
-		return (String) tail.getPrevious().getData() + "tail\n" +head.getNext().getData()+"head";
+		return (String) tail.getPrevious().getData() + "tail\n" +head.getNext().getData()+"head";//todos nexts setados
+	}
+	//teste excluir
+	public String percorreInvertido(){//todos previous setados
+		String retorno = "";
+		Node<T> iter = tail;
+		while(iter != null){
+			retorno += iter.getData() + "\n";
+			iter = iter.getPrevious();
+		}
+		return retorno; 
 	}
 
 	public void insert(int index, T data){
 		Node<T> actual = new Node<>(data);
 		Node<T> iter = head;
-		for(int i = 0; i < index; i++){
+		for(int i = 1; i < index; i++){//percorre ate chegar na pos desejada
 			iter = iter.getNext();
 		}
-		iter = new Node(data);//verificar
+		if(iter == head){
+			//
+			count++;
+		}else{
+			actual.setPrevious(iter.getPrevious());
+			actual.setNext(iter);
+			iter.getPrevious().setNext(actual);
+			iter.getNext().setPrevious(actual);
+			count++;
+		}
 	}
 
 	public T getNode(int index){
 		return null;//implementar
 	}
 
-	public void remove(int index){}//deixar variavel sem referencia e deixar GarbageColector agir, ou setar Null
+	public void remove(int index){//deixar variavel sem referencia e deixar GarbageColector agir, ou setar Null
+		
+	}
 
 	public int getSize(){
 		return count;
